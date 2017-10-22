@@ -1,5 +1,5 @@
 let
-fnCampaignOptions = (campaignId as text) =>
+fnCampaignOptions = (campaignId as text, token as text, clientlogin as nullable text) =>
 
 let
     auth = "Bearer "&token,
@@ -17,7 +17,7 @@ let
         [Headers = [#"Authorization"=auth,
                     #"Accept-Language" = "ru",
                     #"Content-Type" = "application/json; charset=utf-8",
-                    #"Client-Login" = ""],
+                    #"Client-Login" = clientlogin],
         Content = Text.ToBinary(body) ]),
     jsonList = Json.Document(userIdSource,65001),
     toTable = Table.FromRecords({jsonList}),
