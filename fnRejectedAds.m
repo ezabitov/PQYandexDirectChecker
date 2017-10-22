@@ -1,5 +1,5 @@
 let
-fnRejectedAds = (campaignId as text) =>
+fnRejectedAds = (campaignId as text, token as text, clientlogin as nullable text) =>
 let
     auth = "Bearer "&token,
     url = "https://api.direct.yandex.com/json/v5/ads",
@@ -11,7 +11,7 @@ let
             {
                 ""CampaignIds"": ["""&campaignId&"""],
                 ""Statuses"": [""REJECTED""]
-                }, 
+                },
             ""FieldNames"": [""Id"", ""Status"", ""AdGroupId""]
         }
     }",
