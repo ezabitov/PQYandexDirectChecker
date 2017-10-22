@@ -52,7 +52,9 @@ let
 
     expandDailyBudget = Table.ExpandRecordColumn(expandCampaigns1, "Campaigns", {"Name", "Id", "DailyBudget"}, {"Name", "Id", "DailyBudget"}),
     expandDailyBudget2 = Table.ExpandRecordColumn(expandDailyBudget, "DailyBudget", {"Mode", "Amount"}, {"DailyBudget.Mode", "DailyBudget.Amount"}),
-    unpivotDailyBudget = Table.UnpivotOtherColumns(expandDailyBudget2, {"Name", "Id"}, "Option", "Value"),
+    budgetTypeChange = Table.TransformColumnTypes(expandDailyBudget2,{{"DailyBudget.Amount", Int64.Type}}),
+    budgetToReal = Table.TransformColumns(#"Измененный тип", {{"DailyBudget.Amount", each _ / 1000000, type number}}),
+    unpivotDailyBudget = Table.UnpivotOtherColumns(budgetToReal, {"Name", "Id"}, "Option", "Value"),
     append = Table.Combine({expandSettings2, unpivotRelKey, renameItemsToValue, addValueEmail, unpivotStrategy, unpivotDailyBudget}),
     delAnother = Table.SelectColumns(append,{"Value", "Option"}),
     transpotting = Table.Transpose(delAnother),
