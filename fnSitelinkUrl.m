@@ -1,5 +1,5 @@
 let
-    fnSitelinkUrl = (sitelinkSetId as text) =>
+    fnSitelinkUrl = (sitelinkSetId as text, token as text, clientlogin as nullable text) =>
     let
         auth = "Bearer "&token,
         sitelinkUrl = "https://api.direct.yandex.com/json/v5/sitelinks",
