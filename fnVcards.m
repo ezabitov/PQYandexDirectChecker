@@ -1,5 +1,5 @@
 let
-    fnVcards = (sitelinkSetId as text) =>
+    fnVcards = (sitelinkSetId as text, token as text, clientlogin as nullable text) =>
     let
         auth = "Bearer "&token,
         urlVcards = "https://api.direct.yandex.com/json/v5/vcards",
