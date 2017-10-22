@@ -7,7 +7,7 @@ let
         getMetadata,
 
 
-    fnSitelinkUrl = (sitelinkSetId as text) =>
+    fnSitelinkUrl = (sitelinkSetId as text, token as text, clientlogin as nullable text) =>
     let
         auth = "Bearer "&token,
         sitelinkUrl = "https://api.direct.yandex.com/json/v5/sitelinks",
@@ -41,7 +41,7 @@ let
         renameSitelinksCol = Table.RenameColumns(changeSitelinksTypeToText,{{"SitelinkHref.1", "SitelinkHref"}})
     in
         renameSitelinksCol,
- fnCampaignServerResponse = (campaignsId as text) =>
+ fnCampaignServerResponse = (campaignsId as text, token as text, clientlogin as nullable text) =>
     let
         auth = "Bearer "&token,
         urlAds = "https://api.direct.yandex.com/json/v5/ads",
@@ -95,7 +95,7 @@ let
         deleteColExSitelinks = Table.SelectColumns(deleteHttp,{"SitelinkSetId"}),
         distinctSitelinks = Table.Distinct(deleteColExSitelinks),
         sitelinksDelNull = Table.SelectRows(distinctSitelinks, each [SitelinkSetId] <> null),
-        sitelinksFnToTable = Table.AddColumn(sitelinksDelNull, "Custom", each fnSitelinkUrl([SitelinkSetId])),
+        sitelinksFnToTable = Table.AddColumn(sitelinksDelNull, "Custom", each fnSitelinkUrl([SitelinkSetId], token, clientlogin)),
         expandSitelinks = Table.ExpandTableColumn(sitelinksFnToTable, "Custom", {"SitelinkHref"}, {"SitelinkHref"}),
         expandSitelinksResponse = Table.AddColumn(expandSitelinks, "Пользовательская", each fnServerResponse([SitelinkHref])),
         expandSitelinksResponse1 = Table.ExpandRecordColumn(expandSitelinksResponse, "Пользовательская", {"Response.Status"}, {"Response.Sitelinks"}),
